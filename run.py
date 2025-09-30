@@ -237,6 +237,7 @@ def main():
     parser.add_argument('--max_iter', type=int, default=5)
     parser.add_argument("--api_key", default="key", type=str, help="YOUR_OPENAI_API_KEY")
     parser.add_argument("--api_model", default="gpt-4-vision-preview", type=str, help="api model name")
+    parser.add_argument("--api_base", type=str, default=None, help="Custom API base URL (e.g., https://api.openai.com/v1 or your proxy endpoint)")
     parser.add_argument("--output_dir", type=str, default='results')
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--max_attached_imgs", type=int, default=1)
@@ -254,7 +255,10 @@ def main():
     args = parser.parse_args()
 
     # OpenAI client
-    client = OpenAI(api_key=args.api_key)
+    if args.api_base:
+        client = OpenAI(api_key=args.api_key, base_url=args.api_base)
+    else:
+        client = OpenAI(api_key=args.api_key)
 
     options = driver_config(args)
 
